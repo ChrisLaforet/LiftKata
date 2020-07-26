@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace LiftKata
 {
@@ -8,123 +9,75 @@ namespace LiftKata
 		private List<LiftLocationStatus> dispatchQueue = new List<LiftLocationStatus>();
 		private Direction currentDirection = new Direction();
 
-		public Lift(int totalFloors) => TotalFloors = totalFloors;
+		private List<Car> cars = new List<Car>();
 
-		public int TotalFloors
+		public Lift() { }
+		//		public Lift(int totalFloors) => TotalFloors = totalFloors;
+
+		public Car CreateLiftCar(int totalFloors)
 		{
-			get;
-			private set;
+			Car car = new Car(this, totalFloors);
+			cars.Add(car);
+			return car;
 		}
 
-		public int CurrentFloor
+		public void TakeCarOffline(Car car)
 		{
-			get;
-			private set;
+			car.TakeOffline();
 		}
 
-		public int TopFloor
-		{
-			get => TotalFloors - 1;
-		}
+		//public LiftLocationStatus SummonTo(int floor)
+		//{
+		//	LiftLocationStatus liftLocation = new LiftLocationStatus(this, floor, DetermineDirectionTowards(floor));
+		//	if (currentDirection.HasArrived())
+		//	{
+		//		currentDirection = new Direction(liftLocation.Direction);
+		//	} 
+		//	//else
+		//	//{
+		//	//	currentDirection = new Direction(liftLocation.IsMovingUp());
+		//	//}
 
-		public bool IsAlreadyOn(int floor)
-		{
-			if (floor < 0 || floor >= TotalFloors)
-			{
-				throw new InvalidFloorException(floor);
-			}
-			return floor == CurrentFloor;
-		}
+		//	dispatchQueue.Add(liftLocation);
+		//	return liftLocation;
+		//}
 
-		public LiftLocationStatus SummonTo(int floor)
-		{
-			LiftLocationStatus liftLocation = new LiftLocationStatus(this, floor, DetermineDirectionTowards(floor));
-			if (currentDirection.HasArrived())
-			{
-				currentDirection = new Direction(liftLocation.Direction);
-			} 
-			//else
-			//{
-			//	currentDirection = new Direction(liftLocation.IsMovingUp());
-			//}
-
-			dispatchQueue.Add(liftLocation);
-			return liftLocation;
-		}
-
-		public void ClickTimeUnit()
-		{
-			List<LiftLocationStatus> toRemove = new List<LiftLocationStatus>();
-			foreach (LiftLocationStatus liftLocation in dispatchQueue)
-			{
-				if (liftLocation.IsMovingUp() && currentDirection.IsMovingUp())
-				{
-					if (CurrentFloor < TopFloor)
-						CurrentFloor = CurrentFloor + 1;
-				}
-				else if (liftLocation.IsMovingDown() && currentDirection.IsMovingDown())
-				{
-					if (CurrentFloor > 0)
-						CurrentFloor = CurrentFloor - 1;
-				}
+		//public void ClickTimeUnit()
+		//{
+		//	List<LiftLocationStatus> toRemove = new List<LiftLocationStatus>();
+		//	foreach (LiftLocationStatus liftLocation in dispatchQueue)
+		//	{
+		//		if (liftLocation.IsMovingUp() && currentDirection.IsMovingUp())
+		//		{
+		//			if (CurrentFloor < TopFloor)
+		//				CurrentFloor = CurrentFloor + 1;
+		//		}
+		//		else if (liftLocation.IsMovingDown() && currentDirection.IsMovingDown())
+		//		{
+		//			if (CurrentFloor > 0)
+		//				CurrentFloor = CurrentFloor - 1;
+		//		}
 				
-				if (CurrentFloor == liftLocation.DestinationFloor)
-				{
-					liftLocation.Direction = new Direction();
-					toRemove.Add(liftLocation);
-				}
-			}
+		//		if (CurrentFloor == liftLocation.DestinationFloor)
+		//		{
+		//			liftLocation.Direction = new Direction();
+		//			toRemove.Add(liftLocation);
+		//		}
+		//	}
 
-			if (toRemove.Count > 0)
-			{
-				dispatchQueue = dispatchQueue.Where(x => !toRemove.Contains(x)).ToList();
-			}
-		}
+		//	if (toRemove.Count > 0)
+		//	{
+		//		dispatchQueue = dispatchQueue.Where(x => !toRemove.Contains(x)).ToList();
+		//	}
+		//}
 
-		private Direction DetermineDirectionTowards(int floor)
-		{
-			if (floor == CurrentFloor)
-			{
-				return new Direction();
-			}
-			return new Direction(floor > CurrentFloor);
-		}
-	}
-
-	public class Direction
-	{
-		private int direction;
-
-		public Direction() => direction = 0;
-
-		public Direction(Direction other)
-		{
-			direction = other.direction;
-		}
-
-		public Direction(bool isMovingUp)
-		{
-			direction = isMovingUp ? 1 : -1;
-		}
-
-		void SetArrived()
-		{
-			direction = 0;
-		}
-
-		public bool IsMovingUp()
-		{
-			return direction > 0;
-		}
-
-		public bool IsMovingDown()
-		{
-			return direction < 0;
-		}
-
-		public bool HasArrived()
-		{
-			return direction == 0;
-		}
+		//private Direction DetermineDirectionTowards(int floor)
+		//{
+		//	if (floor == CurrentFloor)
+		//	{
+		//		return new Direction();
+		//	}
+		//	return new Direction(floor > CurrentFloor);
+		//}
 	}
 }

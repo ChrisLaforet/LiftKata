@@ -2,19 +2,18 @@
 {
 	public class LiftLocationStatus
 	{
-		private readonly Lift lift;
-		private Direction direction;
+		private readonly Car car;
 
-		public LiftLocationStatus(Lift lift, int destinationFloor, Direction direction)
+		public LiftLocationStatus(Car car, int destinationFloor, Direction direction)
 		{
-			this.lift = lift;
-			this.direction = direction;
+			this.car = car;
+			this.Direction = direction;
 			DestinationFloor = destinationFloor;
 		}
 
 		public int CurrentFloor
 		{
-			get => lift.CurrentFloor;
+			get => car.CurrentFloor;
 		}
 
 		public int DestinationFloor
@@ -25,23 +24,23 @@
 
 		public bool HasArrived()
 		{
-			return direction.HasArrived();
+			return Direction.HasArrived();
 		}
 
 		public bool IsMovingUp()
 		{
-			return direction.IsMovingUp();
+			return Direction.IsMovingUp();
 		}
 
 		public bool IsMovingDown()
 		{
-			return direction.IsMovingDown();
+			return Direction.IsMovingDown();
 		}
 
 		internal Direction Direction
 		{
-			get => direction;
-			set => this.direction = value;
+			get;
+			set;
 		}
 	}
 }
