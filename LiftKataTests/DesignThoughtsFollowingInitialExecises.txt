@@ -1,0 +1,44 @@
+﻿The execution of this Kata has now reached a place where design is important
+otherwise everything will become brittle.
+
+My design thoughts are below:
+
+A lift (elevator) comprises at least two components: a Car and a Dispatch
+
+The Car is the physical piece that we are familiar with.  A Car has 
+several critical attributes and operations that need to be considered:
+
+	a. State - is it Parked, Stopped (temporary), Moving Up, Moving Down?
+	b. Doors - are they Open, Opening, Closing, Closed?
+	c. Location - what floor is it on while moving or still?
+	d. Pending State - is it pending Move Up or Move Down?
+	e. Default Park Floor - after a period of inactivity, the car should return
+	           to this floor and park there.  This is done for minimizing
+			   wait times.  Most lifts park on the ground floor.
+	f. Summon Response Time while Moving - how many floors in advance
+	           does the car need to be able to add a stop while 
+			   travelling in the same direction as the summons?  This 
+			   depends upon the speed of the lift - 1 floor, 2, 3?
+
+The Dispatch is the "logic board" for the disposition of the Car.  It takes
+care of driving the movements.  Here are some considerations:
+
+	a. There are two types of command - Request and Summons
+	b. Requests are commands given within the car and consist only of a Floor.
+	   Requests must be fulfilled ASAP and are directionless.
+	c. Summons are commands given from outside and consist of two properties:
+	   Floor of Summons and Direction desired.  At the limits of the lift,
+	   Direction choices are limited.
+	d. Dispatch should track two queues - Up and Down: Requests and Summons
+	   are attached to these queues.
+	e. Duplicate Request and Summons should be removed.  Note that a Summons
+	   is not equivalent to a Request, however.  Summons have a direction
+	   vector.
+
+Commands should be handled as events.
+
+Summons and Requests should contain a target for notification.  When the car
+arrives to fulfill the command, a notification event should be raised to
+the target.
+
+
