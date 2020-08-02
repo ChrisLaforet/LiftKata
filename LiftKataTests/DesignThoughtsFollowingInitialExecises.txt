@@ -25,10 +25,11 @@ care of driving the movements.  Here are some considerations:
 
 	a. There are two types of command - Request and Summons
 	b. Requests are commands given within the car and consist only of a Floor.
-	   Requests must be fulfilled ASAP and are directionless.
+	   Requests must be fulfilled ASAP and are directionless. Requests are
+	   specific to a car since they originate inside the car.
 	c. Summons are commands given from outside and consist of two properties:
 	   Floor of Summons and Direction desired.  At the limits of the lift,
-	   Direction choices are limited.
+	   Direction choices are limited.  Summons are car-agnostic.
 	d. Dispatch should track two queues - Up and Down: Requests and Summons
 	   are attached to these queues.
 	e. Duplicate Request and Summons should be removed.  Note that a Summons

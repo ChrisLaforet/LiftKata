@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace LiftKata
+﻿namespace LiftKata
 {
 	public class Lift
 	{

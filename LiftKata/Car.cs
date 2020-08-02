@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace LiftKata
 {
 	public class Car
@@ -12,6 +13,8 @@ namespace LiftKata
 		private readonly Lift parentLift;
 
 		private CarDirection currentDirection = CarDirection.STOPPED;
+
+		private readonly Queue<Request> requestQueue = new Queue<Request>();
 
 		internal Car(Lift parentLift, int totalFloors)
 		{
