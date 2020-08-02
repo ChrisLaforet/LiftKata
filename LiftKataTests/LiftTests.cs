@@ -35,7 +35,7 @@ namespace LiftKataTests
 		[Test]
 		public void GivenANewLift_WhenQueriedForCarState_ReturnsParked()
 		{
-			Assert.AreEqual(CAR_STATE.PARKED, CreateLiftCar().CarState);
+			Assert.AreEqual(CarStatus.PARKED, CreateLiftCar().CarState);
 		}
 
 		[Test]
@@ -43,13 +43,13 @@ namespace LiftKataTests
 		{
 			Car car = CreateLiftCar();
 			lift.TakeCarOffline(car);
-			Assert.AreEqual(CAR_STATE.OFFLINE, car.CarState);
+			Assert.AreEqual(CarStatus.OFFLINE, car.CarState);
 		}
 
 		[Test]
 		public void GivenANewLift_WhenQueriedForDoorState_ReturnsDoorsOpen()
 		{
-			Assert.AreEqual(DOOR_STATE.OPEN, CreateLiftCar().DoorState);
+			Assert.AreEqual(DoorStatus.OPEN, CreateLiftCar().DoorState);
 		}
 
 		[Test]
@@ -57,7 +57,7 @@ namespace LiftKataTests
 		{
 			Car car = CreateLiftCar();
 			lift.TakeCarOffline(car);
-			Assert.AreEqual(DOOR_STATE.CLOSED, car.DoorState);
+			Assert.AreEqual(DoorStatus.CLOSED, car.DoorState);
 		}
 
 		[Test]

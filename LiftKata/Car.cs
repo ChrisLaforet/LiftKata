@@ -5,11 +5,11 @@ namespace LiftKata
 {
 	public class Car
 	{
-		public enum CAR_STATE { PARKED, STOPPED, MOVING_UP, MOVING_DOWN, OFFLINE };
+		public enum CarStatus { PARKED, STOPPED, MOVING_UP, MOVING_DOWN, OFFLINE };
 
-		public enum CAR_PENDING_STATE { NONE, MOVE_UP, MOVE_DOWN };
+		public enum CarPendingStatus { NONE, MOVE_UP, MOVE_DOWN };
 
-		public enum DOOR_STATE { OPEN, OPENING, CLOSED, CLOSING };
+		public enum DoorStatus { OPEN, OPENING, CLOSED, CLOSING };
 
 		public const int RESPONSE_TIME_IN_FLOORS = 2;		// Eventually needs to be configured by the lift - this varies based on the speed of car types
 
@@ -23,14 +23,14 @@ namespace LiftKata
 		{
 			this.parentLift = parentLift;
 			TotalFloors = totalFloors;
-			CarState = CAR_STATE.PARKED;
-			DoorState = DOOR_STATE.OPEN;
+			CarState = CarStatus.PARKED;
+			DoorState = DoorStatus.OPEN;
 		}
 
 		internal void TakeOffline()
 		{
-			DoorState = DOOR_STATE.CLOSED;
-			CarState = CAR_STATE.OFFLINE;
+			DoorState = DoorStatus.CLOSED;
+			CarState = CarStatus.OFFLINE;
 		}
 
 		public Lift ParentLift
@@ -68,17 +68,17 @@ namespace LiftKata
 
 		public bool IsStopped
 		{
-			get => CarState == CAR_STATE.PARKED ||
-				(CarState == CAR_STATE.STOPPED && CarPendingState == CAR_PENDING_STATE.NONE);
+			get => CarState == CarStatus.PARKED ||
+				(CarState == CarStatus.STOPPED && CarPendingState == CarPendingStatus.NONE);
 		}
 
 		public bool IsVisiting(DesiredDirection direction)
 		{
-			CAR_PENDING_STATE matchingState = direction == DesiredDirection.UP ?
-				CAR_PENDING_STATE.MOVE_UP :
-				CAR_PENDING_STATE.MOVE_DOWN;
+			CarPendingStatus matchingState = direction == DesiredDirection.UP ?
+				CarPendingStatus.MOVE_UP :
+				CarPendingStatus.MOVE_DOWN;
 
-			return CarState == CAR_STATE.STOPPED && CarPendingState == matchingState;
+			return CarState == CarStatus.STOPPED && CarPendingState == matchingState;
 		}
 
 		public bool IsAvailable(Summon summon)
@@ -95,8 +95,8 @@ namespace LiftKata
 				return false;
 
 			bool isMovingTheSameDirection = summon.DesiredDirection == DesiredDirection.DOWN ?
-				CarState == CAR_STATE.MOVING_DOWN || CarPendingState == CAR_PENDING_STATE.MOVE_DOWN :
-				CarState == CAR_STATE.MOVING_UP || CarPendingState == CAR_PENDING_STATE.MOVE_UP;
+				CarState == CarStatus.MOVING_DOWN || CarPendingState == CarPendingStatus.MOVE_DOWN :
+				CarState == CarStatus.MOVING_UP || CarPendingState == CarPendingStatus.MOVE_UP;
 
 			int decisionFloor = summon.DesiredDirection == DesiredDirection.DOWN ?
 				summon.Floor + RESPONSE_TIME_IN_FLOORS :
@@ -136,22 +136,22 @@ namespace LiftKata
 
 		public bool IsOffline
 		{
-			get => CarState == CAR_STATE.OFFLINE;
+			get => CarState == CarStatus.OFFLINE;
 		}
 
-		public CAR_STATE CarState
+		public CarStatus CarState
 		{
 			get;
 			private set;
 		}
 
-		public CAR_PENDING_STATE CarPendingState
+		public CarPendingStatus CarPendingState
 		{
 			get;
 			private set;
 		}
 
-		public DOOR_STATE DoorState
+		public DoorStatus DoorState
 		{
 			get;
 			private set;

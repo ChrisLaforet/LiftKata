@@ -1,6 +1,6 @@
 ﻿namespace LiftKata
 {
-	public class LiftLocationStatus
+	public class LiftLocationStatus : ICarStop
 	{
 		private readonly Car car;
 
@@ -20,6 +20,11 @@
 		{
 			get;
 			private set;
+		}
+
+		public void NotifyArrival()
+		{
+
 		}
 
 		public bool IsStopped
