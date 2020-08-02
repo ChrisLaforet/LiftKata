@@ -1,5 +1,7 @@
 ﻿
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LiftKata
 {
@@ -37,19 +39,57 @@ namespace LiftKata
 			ValidateFloorIsReachable(summon.Floor);
 
 			// determine if a car is already there
-			foreach (var car in cars)
+			foreach (var currentCar in cars)
 			{
-				if (car.IsAvailable(summon))
-					return new LiftLocationStatus(car, summon.Floor, new Direction(CarDirection.STOPPED));
+				if (currentCar.IsAvailable(summon))
+					return new LiftLocationStatus(currentCar, summon.Floor, new Direction(CarDirection.STOPPED));
 			}
 
-			// does a matching summon already exist - return its status
+			// does a matching summon already exist - return its status and find the car it has been assigned to
 
 
-			// if car is not already there, are any on the way?
+			// if car is not already there, are any on the way or get a parked car?
+			Car car = FindClosestAvailableCar(summon);
+			if (car != null)
+			{
+// TODO: add stop to car
+				return new LiftLocationStatus(car, summon.Floor, new Direction(summon.DesiredDirection == DesiredDirection.UP ? CarDirection.MOVING_UP : CarDirection.MOVING_DOWN));
+			}
+			return null;
+		}
 
+		private Car FindClosestAvailableCar(Summon summon)
+		{
+			List<Car> stoppedCars = new List<Car>();
+			List<Car> possibleCars = new List<Car>();
+			List<Car> remainingCars = new List<Car>();
+			foreach (var currentCar in cars)
+			{
+				if (currentCar.IsOffline)
+					continue;
 
-			// if not, summon a parked car
+				if (currentCar.IsStopped)
+					stoppedCars.Add(currentCar);
+				else if (currentCar.CanMovingCarServiceSummons(summon))
+					possibleCars.Add(currentCar);
+				else
+					remainingCars.Add(currentCar);
+			}
+
+			Car car = possibleCars
+							.OrderBy(x => x.FloorsAwayFrom(summon.Floor))
+							.FirstOrDefault();
+			if (car != null)
+				return car;
+
+			car = stoppedCars
+						.OrderBy(x => x.FloorsAwayFrom(summon.Floor))
+						.FirstOrDefault();
+			if (car != null)
+				return car;
+
+// TODO: find the remaining car with the closest destination floor and allocate it
+
 			return null;
 		}
 

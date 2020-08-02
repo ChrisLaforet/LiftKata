@@ -2,10 +2,10 @@
 {
 	public class Summon
 	{
-		private Summon(int floor, DesiredDirection direction)
+		private Summon(int floor, DesiredDirection desiredDirection)
 		{
 			Floor = floor;
-			Direction = direction;
+			DesiredDirection = desiredDirection;
 		}
 
 		public int Floor
@@ -14,7 +14,7 @@
 			set;
 		}
 
-		public DesiredDirection Direction
+		public DesiredDirection DesiredDirection
 		{
 			get;
 			set;

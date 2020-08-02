@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LiftKata
 {
@@ -9,6 +10,8 @@ namespace LiftKata
 		public enum CAR_PENDING_STATE { NONE, MOVE_UP, MOVE_DOWN };
 
 		public enum DOOR_STATE { OPEN, OPENING, CLOSED, CLOSING };
+
+		public const int RESPONSE_TIME_IN_FLOORS = 2;		// Eventually needs to be configured by the lift - this varies based on the speed of car types
 
 		private readonly Lift parentLift;
 
@@ -83,7 +86,38 @@ namespace LiftKata
 			if (summon.Floor != CurrentFloor) {
 				return false;
 			}
-			return IsStopped || IsVisiting(summon.Direction);
+			return IsStopped || IsVisiting(summon.DesiredDirection);
+		}
+
+		public bool CanMovingCarServiceSummons(Summon summon)
+		{
+			if (!DoesCarService(summon.Floor) || IsStopped)
+				return false;
+
+			bool isMovingTheSameDirection = summon.DesiredDirection == DesiredDirection.DOWN ?
+				CarState == CAR_STATE.MOVING_DOWN || CarPendingState == CAR_PENDING_STATE.MOVE_DOWN :
+				CarState == CAR_STATE.MOVING_UP || CarPendingState == CAR_PENDING_STATE.MOVE_UP;
+
+			int decisionFloor = summon.DesiredDirection == DesiredDirection.DOWN ?
+				summon.Floor + RESPONSE_TIME_IN_FLOORS :
+				summon.Floor - RESPONSE_TIME_IN_FLOORS;
+
+			if (!isMovingTheSameDirection)
+				return false;
+			//else if (CurrentFloor == summon.Floor && IsVisiting(summon.DesiredDirection))
+			//	return true;
+			else if (summon.DesiredDirection == DesiredDirection.DOWN &&
+				CurrentFloor >= decisionFloor)
+				return true;
+			else if (summon.DesiredDirection == DesiredDirection.UP &&
+				CurrentFloor <= decisionFloor)
+				return true;
+			return true;
+		}
+
+		public int FloorsAwayFrom(int floor)
+		{
+			return Math.Abs(floor - CurrentFloor);
 		}
 
 		public bool DoesCarService(int floor)
