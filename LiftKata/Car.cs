@@ -120,6 +120,15 @@ namespace LiftKata
 			return Math.Abs(floor - CurrentFloor);
 		}
 
+		public CarDirection CarDirectionTo(int floor)
+		{
+			if (floor < CurrentFloor)
+				return CarDirection.MOVING_DOWN;
+			else if (floor > CurrentFloor)
+				return CarDirection.MOVING_UP;
+			return CarDirection.STOPPED;
+		}
+
 		public bool DoesCarService(int floor)
 		{
 			return floor >= BottomFloor && floor <= TopFloor;

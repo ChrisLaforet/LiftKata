@@ -53,7 +53,7 @@ namespace LiftKata
 			if (car != null)
 			{
 // TODO: add stop to car
-				return new LiftLocationStatus(car, summon.Floor, new Direction(summon.DesiredDirection == DesiredDirection.UP ? CarDirection.MOVING_UP : CarDirection.MOVING_DOWN));
+				return new LiftLocationStatus(car, summon.Floor, new Direction(car.CarDirectionTo(summon.Floor)));
 			}
 			return null;
 		}
