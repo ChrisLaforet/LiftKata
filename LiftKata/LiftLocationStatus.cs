@@ -22,19 +22,19 @@
 			private set;
 		}
 
-		public bool HasArrived()
+		public bool IsStopped
 		{
-			return Direction.HasArrived();
+			get => Direction.IsPaused || Direction.IsStopped;
 		}
 
-		public bool IsMovingUp()
+		public bool IsMovingUp
 		{
-			return Direction.IsMovingUp();
+			get => Direction.IsMovingUp;
 		}
 
-		public bool IsMovingDown()
+		public bool IsMovingDown
 		{
-			return Direction.IsMovingDown();
+			get => Direction.IsMovingDown;
 		}
 
 		internal Direction Direction

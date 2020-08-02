@@ -1,39 +1,54 @@
 ﻿namespace LiftKata
-{
+{ 
+	public enum CarDirection 
+	{
+		MOVING_UP,
+		PENDING_MOVE_UP,
+		STOPPED,
+		PENDING_MOVE_DOWN,
+		MOVING_DOWN 
+	}
+
+	public enum DesiredDirection
+	{
+		UP,
+		DOWN
+	}
+
 	public class Direction
 	{
-		private int direction;
+		private readonly CarDirection direction;
+		
+		public Direction() => direction = CarDirection.STOPPED;
 
-		public Direction() => direction = 0;
+		public Direction(CarDirection carDirection) => direction = carDirection;
 
 		public Direction(Direction other)
 		{
 			direction = other.direction;
 		}
 
-		public Direction(bool isMovingUp)
+		public bool IsStopped
 		{
-			direction = isMovingUp ? 1 : -1;
+			get => direction == CarDirection.STOPPED;
 		}
 
-		void SetArrived()
+		public bool IsPaused
 		{
-			direction = 0;
+			get => direction == CarDirection.PENDING_MOVE_DOWN ||
+				direction == CarDirection.PENDING_MOVE_UP;
 		}
 
-		public bool IsMovingUp()
+		public bool IsMovingUp
 		{
-			return direction > 0;
+			get => direction == CarDirection.MOVING_UP ||
+				direction == CarDirection.PENDING_MOVE_UP;
 		}
 
-		public bool IsMovingDown()
+		public bool IsMovingDown
 		{
-			return direction < 0;
-		}
-
-		public bool HasArrived()
-		{
-			return direction == 0;
+			get => direction == CarDirection.MOVING_DOWN ||
+				direction == CarDirection.PENDING_MOVE_DOWN;
 		}
 	}
 }

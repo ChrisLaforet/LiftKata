@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 
 namespace LiftKata
 {
@@ -12,7 +10,6 @@ namespace LiftKata
 		private List<Car> cars = new List<Car>();
 
 		public Lift() { }
-		//		public Lift(int totalFloors) => TotalFloors = totalFloors;
 
 		public Car CreateLiftCar(int totalFloors)
 		{
@@ -26,21 +23,48 @@ namespace LiftKata
 			car.TakeOffline();
 		}
 
-		//public LiftLocationStatus SummonTo(int floor)
-		//{
-		//	LiftLocationStatus liftLocation = new LiftLocationStatus(this, floor, DetermineDirectionTowards(floor));
-		//	if (currentDirection.HasArrived())
-		//	{
-		//		currentDirection = new Direction(liftLocation.Direction);
-		//	} 
-		//	//else
-		//	//{
-		//	//	currentDirection = new Direction(liftLocation.IsMovingUp());
-		//	//}
+		private void validateFloorIsReachable(int floor)
+		{
+			foreach (var car in cars)
+			{
+				if (!car.IsOffline && car.DoesCarService(floor))
+					return;
+			}
+			throw new InvalidFloorException(floor);
+		}
 
-		//	dispatchQueue.Add(liftLocation);
-		//	return liftLocation;
-		//}
+		public LiftLocationStatus SummonTo(Summon summon)
+		{
+			validateFloorIsReachable(summon.Floor);
+
+			// determine if a car is already there
+			foreach (var car in cars)
+			{
+				if (car.IsAvailable(summon))
+					return new LiftLocationStatus(car, summon.Floor, new Direction(CarDirection.STOPPED));
+			}
+
+			// if car is not already there, is any on the way?
+
+			// does a match summon already exist 
+
+			// if not, summon a parked car
+
+
+			//LiftLocationStatus liftLocation = new LiftLocationStatus(this, floor, DetermineDirectionTowards(floor));
+			//if (currentDirection.HasArrived())
+			//{
+			//	currentDirection = new Direction(liftLocation.Direction);
+			//}
+			////else
+			////{
+			////	currentDirection = new Direction(liftLocation.IsMovingUp());
+			////}
+
+			//dispatchQueue.Add(liftLocation);
+			//return liftLocation;
+return null;
+		}
 
 		//public void ClickTimeUnit()
 		//{
@@ -57,7 +81,7 @@ namespace LiftKata
 		//			if (CurrentFloor > 0)
 		//				CurrentFloor = CurrentFloor - 1;
 		//		}
-				
+
 		//		if (CurrentFloor == liftLocation.DestinationFloor)
 		//		{
 		//			liftLocation.Direction = new Direction();
