@@ -34,7 +34,7 @@ namespace LiftKata
 			throw new InvalidFloorException(floor);
 		}
 
-		internal LiftLocationStatus SummonTo(Summon summon)
+		internal LocationStatus SummonTo(Summon summon)
 		{
 			ValidateFloorIsReachable(summon.Floor);
 
@@ -42,7 +42,7 @@ namespace LiftKata
 			foreach (var currentCar in cars)
 			{
 				if (currentCar.IsAvailable(summon))
-					return new LiftLocationStatus(currentCar, summon.Floor, new Direction(CarDirection.STOPPED));
+					return new LocationStatus(currentCar, summon.Floor, new Direction(CarDirection.STOPPED));
 			}
 
 			// does a matching summon already exist - return its status and find the car it has been assigned to
@@ -53,7 +53,7 @@ namespace LiftKata
 			if (car != null)
 			{
 // TODO: add stop to car
-				return new LiftLocationStatus(car, summon.Floor, new Direction(car.CarDirectionTo(summon.Floor)));
+				return new LocationStatus(car, summon.Floor, new Direction(car.CarDirectionTo(summon.Floor)));
 			}
 			return null;
 		}
@@ -99,7 +99,7 @@ namespace LiftKata
 			private set;
 		}
 
-		private LinkedList<LiftLocationStatus> dispatchQueue = new LinkedList<LiftLocationStatus>();
+		private LinkedList<LocationStatus> dispatchQueue = new LinkedList<LocationStatus>();
 
 	}
 }

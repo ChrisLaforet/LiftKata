@@ -4,17 +4,16 @@ using System.Text;
 
 namespace LiftKata
 {
-	public class LiftSchedule
+	public class CarSchedule
 	{
-		private Queue<> stops = new Queue<>();
+		private Queue<ICarStatus> stops = new Queue<ICarStatus>();
 
-		public LiftSchedule(DesiredDirection direction) => Direction = direction;
+		public CarSchedule(DesiredDirection direction) => Direction = direction;
 
 		public DesiredDirection Direction
 		{
 			get;
 			private set;
 		}
-
 	}
 }

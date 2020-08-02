@@ -1,8 +1,8 @@
 ﻿namespace LiftKata
 {
-	public class Request : ICarStop
+	public class Request : ICarStatus
 	{
-		public Request(int floor) => DestinastionFloor = floor;
+		public Request(int floor) => DestinationFloor = floor;
 
 		public int DestinationFloor
 		{

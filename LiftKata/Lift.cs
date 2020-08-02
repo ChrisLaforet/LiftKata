@@ -17,7 +17,7 @@
 		}
 
 
-		public LiftLocationStatus SummonTo(Summon summon)
+		public LocationStatus SummonTo(Summon summon)
 		{
 			return dispatcher.SummonTo(summon);
 		}

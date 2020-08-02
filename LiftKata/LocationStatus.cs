@@ -1,10 +1,10 @@
 ﻿namespace LiftKata
 {
-	public class LiftLocationStatus : ICarStop
+	public class LocationStatus : ICarStatus
 	{
 		private readonly Car car;
 
-		public LiftLocationStatus(Car car, int destinationFloor, Direction direction)
+		public LocationStatus(Car car, int destinationFloor, Direction direction)
 		{
 			this.car = car;
 			this.Direction = direction;

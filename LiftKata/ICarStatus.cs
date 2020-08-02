@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LiftKata
 {
-	public interface ICarStop
+	public interface ICarStatus
 	{
 		public int DestinationFloor
 		{

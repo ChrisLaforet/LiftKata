@@ -100,7 +100,7 @@ namespace LiftKataTests
 		public void GivenALift_WhenSummonedForGroundFloor_ReturnsLiftLocationAlreadyThere()
 		{
 			Car car = CreateLiftCar();
-			LiftLocationStatus location = car.ParentLift.SummonTo(Summon.GoingUp(GROUND_FLOOR));
+			LocationStatus location = car.ParentLift.SummonTo(Summon.GoingUp(GROUND_FLOOR));
 			Assert.IsTrue(location.IsStopped);
 			Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
 			Assert.AreEqual(GROUND_FLOOR, location.DestinationFloor);
@@ -110,7 +110,7 @@ namespace LiftKataTests
 		public void GivenALift_WhenSummonedForTopFloor_ReturnsLiftLocationMovingUp()
 		{
 			Car car = CreateLiftCar();
-			LiftLocationStatus location = car.ParentLift.SummonTo(Summon.GoingDown(TOP_FLOOR));
+			LocationStatus location = car.ParentLift.SummonTo(Summon.GoingDown(TOP_FLOOR));
 			Assert.IsTrue(location.IsMovingUp);
 			Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
 			Assert.AreEqual(TOP_FLOOR, location.DestinationFloor);
