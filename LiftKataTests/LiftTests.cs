@@ -106,15 +106,15 @@ namespace LiftKataTests
 			Assert.AreEqual(GROUND_FLOOR, location.DestinationFloor);
 		}
 
-		//		[Test]
-		//		public void GivenALift_WhenSummonedForTopFloor_ReturnsLiftLocationMovingUp()
-		//		{
-		//			Lift lift = CreateLift();
-		//			LiftLocationStatus location = lift.SummonTo(TOP_FLOOR);
-		//			Assert.IsTrue(location.IsMovingUp());
-		//			Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
-		//			Assert.AreEqual(TOP_FLOOR, location.DestinationFloor);
-		//		}
+		[Test]
+		public void GivenALift_WhenSummonedForTopFloor_ReturnsLiftLocationMovingUp()
+		{
+			Car car = CreateLiftCar();
+			LiftLocationStatus location = car.ParentLift.SummonTo(Summon.GoingDown(TOP_FLOOR));
+			Assert.IsTrue(location.IsMovingUp);
+			Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
+			Assert.AreEqual(TOP_FLOOR, location.DestinationFloor);
+		}
 
 		//		[Test]
 		//		public void GivenALift_WhenSummonedForFirstFloor_ReturnsLiftArrivesOnFloorAfterOneTimeUnit()

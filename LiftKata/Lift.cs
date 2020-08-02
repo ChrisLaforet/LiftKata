@@ -4,18 +4,13 @@ namespace LiftKata
 {
 	public class Lift
 	{
-		private List<LiftLocationStatus> dispatchQueue = new List<LiftLocationStatus>();
-		private Direction currentDirection = new Direction();
+		private readonly LiftDispatcher dispatcher;
 
-		private List<Car> cars = new List<Car>();
-
-		public Lift() { }
+		public Lift() => dispatcher = new LiftDispatcher(this);
 
 		public Car CreateLiftCar(int totalFloors)
 		{
-			Car car = new Car(this, totalFloors);
-			cars.Add(car);
-			return car;
+			return dispatcher.CreateLiftCar(totalFloors);
 		}
 
 		public void TakeCarOffline(Car car)
@@ -23,47 +18,10 @@ namespace LiftKata
 			car.TakeOffline();
 		}
 
-		private void validateFloorIsReachable(int floor)
-		{
-			foreach (var car in cars)
-			{
-				if (!car.IsOffline && car.DoesCarService(floor))
-					return;
-			}
-			throw new InvalidFloorException(floor);
-		}
 
 		public LiftLocationStatus SummonTo(Summon summon)
 		{
-			validateFloorIsReachable(summon.Floor);
-
-			// determine if a car is already there
-			foreach (var car in cars)
-			{
-				if (car.IsAvailable(summon))
-					return new LiftLocationStatus(car, summon.Floor, new Direction(CarDirection.STOPPED));
-			}
-
-			// if car is not already there, is any on the way?
-
-			// does a match summon already exist 
-
-			// if not, summon a parked car
-
-
-			//LiftLocationStatus liftLocation = new LiftLocationStatus(this, floor, DetermineDirectionTowards(floor));
-			//if (currentDirection.HasArrived())
-			//{
-			//	currentDirection = new Direction(liftLocation.Direction);
-			//}
-			////else
-			////{
-			////	currentDirection = new Direction(liftLocation.IsMovingUp());
-			////}
-
-			//dispatchQueue.Add(liftLocation);
-			//return liftLocation;
-return null;
+			return dispatcher.SummonTo(summon);
 		}
 
 		//public void ClickTimeUnit()
