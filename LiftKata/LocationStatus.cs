@@ -22,6 +22,11 @@
 			private set;
 		}
 
+		public bool IsRequest
+		{
+			get => false;
+		}
+
 		public void NotifyArrival()
 		{
 

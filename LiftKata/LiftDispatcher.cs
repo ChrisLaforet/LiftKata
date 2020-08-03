@@ -46,14 +46,23 @@ namespace LiftKata
 			}
 
 			// does a matching summon already exist - return its status and find the car it has been assigned to
-
+			foreach (var currentCar in cars)
+			{
+				if (currentCar.ContainsStop(summon))
+				{
+					LocationStatus locationStatus = new LocationStatus(currentCar, summon.Floor, new Direction(currentCar.CarDirectionTo(summon.Floor)));
+					currentCar.AddStop(locationStatus, summon.DesiredDirection);
+					return locationStatus;
+				}
+			}
 
 			// if car is not already there, are any on the way or get a parked car?
 			Car car = FindClosestAvailableCar(summon);
 			if (car != null)
 			{
-// TODO: add stop to car
-				return new LocationStatus(car, summon.Floor, new Direction(car.CarDirectionTo(summon.Floor)));
+				LocationStatus locationStatus = new LocationStatus(car, summon.Floor, new Direction(car.CarDirectionTo(summon.Floor)));
+				car.AddStop(locationStatus, summon.DesiredDirection);
+				return locationStatus;
 			}
 			return null;
 		}

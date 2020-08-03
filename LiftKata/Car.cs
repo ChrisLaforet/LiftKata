@@ -17,7 +17,7 @@ namespace LiftKata
 
 		private CarDirection currentDirection = CarDirection.STOPPED;
 
-		private readonly Queue<Request> requestQueue = new Queue<Request>();
+		private readonly Queue<CarSchedule> schedules = new Queue<CarSchedule>();
 
 		internal Car(Lift parentLift, int totalFloors)
 		{
@@ -133,6 +133,43 @@ namespace LiftKata
 		{
 			return floor >= BottomFloor && floor <= TopFloor;
 		}
+
+		public bool ContainsStop(Summon summon)
+		{
+			if (schedules.Count == 0)
+				return false;
+
+			foreach (var schedule in schedules)
+			{
+				if (schedule.ContainsStop(summon))
+					return true;
+			}
+			return false;
+		}
+
+		public bool ContainsStop(ICarStatus stop)
+		{
+			if (schedules.Count == 0)
+				return false;
+
+			foreach (var schedule in schedules)
+			{
+				if (schedule.ContainsStop(stop))
+					return true;
+			}
+			return false;
+		}
+
+		public void AddStop(ICarStatus stop, DesiredDirection direction)
+		{
+
+		}
+
+		public void AddStop(ICarStatus stop)
+		{
+
+		}
+
 
 		public bool IsOffline
 		{

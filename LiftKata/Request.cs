@@ -10,6 +10,11 @@
 			private set;
 		}
 
+		public bool IsRequest
+		{
+			get => true;
+		}
+
 		public void NotifyArrival()
 		{
 		

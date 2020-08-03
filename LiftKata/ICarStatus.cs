@@ -11,6 +11,11 @@ namespace LiftKata
 			get;
 		}
 
+		public bool IsRequest
+		{
+			get;
+		}
+
 		void NotifyArrival();
 	}
 }
