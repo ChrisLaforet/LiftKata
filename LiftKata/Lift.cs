@@ -1,8 +1,12 @@
 ﻿namespace LiftKata
 {
+	public delegate void Tick();
+
 	public class Lift
 	{
 		private readonly LiftDispatcher dispatcher;
+		internal event Tick TickEvent;
+		private long ticksInService = 0;
 
 		public Lift() => dispatcher = new LiftDispatcher(this);
 
@@ -14,6 +18,17 @@
 		public void TakeCarOffline(Car car)
 		{
 			car.TakeOffline();
+		}
+
+		public void SendTick()
+		{
+			++ticksInService;
+			TickEvent?.Invoke();
+		}
+
+		public long TimeInService()
+		{
+			return ticksInService;
 		}
 
 

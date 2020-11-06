@@ -15,6 +15,12 @@ namespace LiftKata
 		internal LiftDispatcher(Lift parentLift)
 		{
 			ParentLift = parentLift;
+			parentLift.TickEvent += this.TickHandler;
+		}
+
+		private void TickHandler()
+		{
+
 		}
 
 		internal Car CreateLiftCar(int totalFloors)

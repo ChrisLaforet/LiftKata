@@ -116,34 +116,67 @@ namespace LiftKataTests
 			Assert.AreEqual(TOP_FLOOR, location.DestinationFloor);
 		}
 
-		//		[Test]
-		//		public void GivenALift_WhenSummonedForFirstFloor_ReturnsLiftArrivesOnFloorAfterOneTimeUnit()
-		//		{
-		//			Lift lift = CreateLift();
-		//			LiftLocationStatus location = lift.SummonTo(1);
-		//			Assert.IsTrue(location.IsMovingUp());
-		//			Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
+		[Test]
+		public void GivenALift_WhenSummonedForFirstFloor_ReturnsLiftClosesDoorsAfterOneTick()
+		{
+			Car car = CreateLiftCar();
+			Assert.AreEqual(GROUND_FLOOR, car.CurrentFloor);
+			Assert.AreEqual(DoorStatus.OPEN, car.DoorState);
+			Assert.AreEqual(CarPendingStatus.NONE, car.CarPendingState);
 
-		//			lift.ClickTimeUnit();
-		//			Assert.IsTrue(location.HasArrived());
-		//			Assert.AreEqual(1, location.CurrentFloor);
-		//		}
+			LocationStatus location = car.ParentLift.SummonTo(Summon.GoingDown(1));
+			lift.SendTick();
 
+			Assert.AreEqual(CarPendingStatus.MOVE_UP, car.CarPendingState);
+			Assert.IsTrue(location.IsMovingUp);
+			Assert.AreEqual(DoorStatus.CLOSING, car.DoorState);
+
+			lift.SendTick();
+
+			Assert.AreEqual(DoorStatus.CLOSED, car.DoorState);
+			Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
+		}
+
+		//[Test]
+		//public void GivenALift_WhenSummonedForFirstFloor_ReturnsLiftArrivesOnFirstFloorAfterTwoTicks()
+		//{
+		//	Car car = CreateLiftCar();
+		//	LocationStatus location = car.ParentLift.SummonTo(Summon.GoingDown(1));
+		//	Assert.IsTrue(location.IsMovingUp);
+		//	Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
+
+		//	lift.SendTick();
+		//	Assert.IsTrue(location.HasArrived());
+		//	Assert.AreEqual(1, location.CurrentFloor);
+		//}
+
+		//[Test]
+		//public void GivenALift_WhenSummonedForFirstFloor_ReturnsLiftOpensDoorsOnFirstFloorAfterThreeTicks()
+		//{
+		//	Car car = CreateLiftCar();
+		//	LocationStatus location = car.ParentLift.SummonTo(Summon.GoingDown(1));
+		//	Assert.IsTrue(location.IsMovingUp);
+		//	Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
+
+		//	lift.SendTick();
+		//	Assert.IsTrue(location.HasArrived());
+		//	Assert.AreEqual(1, location.CurrentFloor);
+		//}
 		//		[Test]
-		//		public void GivenALift_WhenSummonedForTopFloor_ReturnsLiftArrivesOnFloorSeveralTimeUnit()
+		//		public void GivenALift_WhenSummonedForTopFloor_ReturnsLiftArrivesOnFloorSeveralTick()
 		//		{
 		//			Lift lift = CreateLift();
 		//			LiftLocationStatus location = lift.SummonTo(TOP_FLOOR);
 		//			Assert.IsTrue(location.IsMovingUp());
 		//			Assert.AreEqual(GROUND_FLOOR, location.CurrentFloor);
 
-		//			lift.ClickTimeUnit();
+		//			lift.ClickTick();
 		//			Assert.IsFalse(location.HasArrived());
 		//			Assert.AreEqual(1, location.CurrentFloor);
 
 		//			for (int click = location.CurrentFloor; click < TOTAL_FLOORS; click++)
 		//			{
-		//				lift.ClickTimeUnit();
+		//				lift.ClickTick();
 		//			}
 		//			Assert.IsTrue(location.HasArrived());
 		//			Assert.AreEqual(TOP_FLOOR, location.CurrentFloor);
@@ -157,12 +190,12 @@ namespace LiftKataTests
 		//			Assert.IsTrue(location2.IsMovingUp());
 		//			Assert.AreEqual(GROUND_FLOOR, location2.CurrentFloor);
 
-		//			lift.ClickTimeUnit();
+		//			lift.ClickTick();
 		//			Assert.IsFalse(location2.HasArrived());
 		//			Assert.AreEqual(1, location2.CurrentFloor);
 		//			LiftLocationStatus location1 = lift.SummonTo(1);
 
-		//			lift.ClickTimeUnit();
+		//			lift.ClickTick();
 		//			Assert.IsTrue(location2.HasArrived());
 		//			Assert.AreEqual(2, location2.CurrentFloor);
 

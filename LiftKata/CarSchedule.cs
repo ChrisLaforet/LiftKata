@@ -14,6 +14,14 @@ namespace LiftKata
 			private set;
 		}
 
+		public ICarStatus NextStop
+		{
+			get
+			{
+				return stops.Count > 0 ? stops.First.Value : null;
+			}
+		}
+
 		public bool ContainsStop(Summon summon)
 		{
 			if (Direction != summon.DesiredDirection)

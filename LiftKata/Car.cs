@@ -19,18 +19,115 @@ namespace LiftKata
 
 		private readonly Queue<CarSchedule> schedules = new Queue<CarSchedule>();
 
+		private CarSchedule activeSchedule;
+
 		internal Car(Lift parentLift, int totalFloors)
 		{
 			this.parentLift = parentLift;
 			TotalFloors = totalFloors;
 			CarState = CarStatus.PARKED;
 			DoorState = DoorStatus.OPEN;
+			parentLift.TickEvent += this.TickHandler;
 		}
 
 		internal void TakeOffline()
 		{
 			DoorState = DoorStatus.CLOSED;
 			CarState = CarStatus.OFFLINE;
+		}
+
+		private void TickHandler()
+		{
+			if ((schedules.Count == 0 && activeSchedule == null) ||
+				CarState == CarStatus.OFFLINE)
+				return;
+
+			if (CarState == CarStatus.STOPPED ||
+				CarState == CarStatus.PARKED)
+			{
+				HandleScheduleFromStop();
+			}
+			else if (CarState == CarStatus.MOVING_UP)
+			{
+				HandleScheduleWhileMovingUp();
+			}
+			else if (CarState == CarStatus.MOVING_DOWN)
+			{
+				HandleScheduleWhileMovingDown();
+			}
+		}
+
+		private void HandleScheduleFromStop()
+		{
+			activeSchedule = schedules.Dequeue();
+			ICarStatus stop = activeSchedule.NextStop;
+
+			DoorState = DoorStatus.CLOSING;
+
+			
+			CarDirection direction = CarDirectionTo(stop.DestinationFloor);
+			if (direction == CarDirection.MOVING_DOWN)
+			{
+				CarPendingState = CarPendingStatus.MOVE_DOWN;
+				CarState = CarStatus.MOVING_DOWN;
+			} 
+			else if (direction == CarDirection.MOVING_UP)
+			{
+				CarPendingState = CarPendingStatus.MOVE_UP;
+				CarState = CarStatus.MOVING_UP;
+			}
+		}
+
+		private void HandleScheduleWhileMovingUp()
+		{
+			if (DoorState == DoorStatus.CLOSING)
+			{
+				DoorState = DoorStatus.CLOSED;
+			}
+			else if (DoorState == DoorStatus.OPENING)
+			{
+				DoorState = DoorStatus.OPEN;
+			}
+
+			// STEP
+		}
+
+		private void HandleScheduleWhileMovingDown()
+		{
+			if (DoorState == DoorStatus.CLOSING)
+			{
+				DoorState = DoorStatus.CLOSED;
+			}
+			else if (DoorState == DoorStatus.OPENING)
+			{
+				DoorState = DoorStatus.OPEN;
+			}
+
+			// STEP
+
+		}
+
+
+		public void AddStop(ICarStatus stop, DesiredDirection direction)
+		{
+			// if the car is stopped and nothing in queue, add to queue and start process
+			if (this.IsStopped)
+			{
+				CarSchedule carSchedule = new CarSchedule(direction);
+				carSchedule.EnqueueStop(stop);
+				schedules.Enqueue(carSchedule);
+				return;
+			}
+
+			// if the car is scheduled and moving towards the stop in the same direction and is within RESPONSE TIME, insert into queue
+
+			// if the car is scheduled and not moving in the same direction, add to the next queue spot when moving in the same direction
+
+		}
+
+		public void AddStop(ICarStatus stop)
+		{
+
 		}
 
 		public Lift ParentLift
@@ -159,17 +256,6 @@ namespace LiftKata
 			}
 			return false;
 		}
-
-		public void AddStop(ICarStatus stop, DesiredDirection direction)
-		{
-
-		}
-
-		public void AddStop(ICarStatus stop)
-		{
-
-		}
-
 
 		public bool IsOffline
 		{
